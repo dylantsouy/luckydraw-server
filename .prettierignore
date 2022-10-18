@@ -1,0 +1,7 @@
+*.config.js
+*.config.json
+node_module
+dist
+.husky
+.vscode
+coverage

@@ -1,0 +1,24 @@
+{
+  "development": {
+    "username": "root",
+    "password": "0000",
+    "database": "lucky_draw_development",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": "0000",
+    "database": "lucky_draw_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": "0000",
+    "database": "lucky_draw",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "use_env_variable": "DATABASE_URL"
+  }
+}
