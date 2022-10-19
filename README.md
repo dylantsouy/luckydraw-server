@@ -61,10 +61,10 @@ https://luckydraw-server.herokuapp.com/api/
 
 ## ⛏️ Built Using <a name = "built_using"></a>
 
-- [Mysql]() - Database
-- [NodeJs]() - Server Environment
-- [Express]() - Server Framework
-- [Sequelize]() - Node.js ORM
+- [Mysql](https://www.mysql.com/) - Database
+- [NodeJs](https://nodejs.org/en/) - Server Environment
+- [Express](https://expressjs.com/) - Server Framework
+- [Sequelize](https://sequelize.org/) - Node.js ORM
 
 ## ✍️ Authors <a name = "authors"></a>
 
