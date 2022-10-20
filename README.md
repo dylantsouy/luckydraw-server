@@ -14,8 +14,8 @@
 
 - [About](#about)
 - [Getting Started](#getting_started)
-- [Deployment](#deployment)
 - [Usage](#usage)
+- [Deployment](#deployment)
 - [Built Using](#built_using)
 - [Authors](#authors)
 - [Acknowledgments](#acknowledgement)
@@ -40,6 +40,13 @@ npm i
 ```
 
 Install the necessary package for project before start.
+
+```
+npm run db:reset
+```
+
+You can simply run this script to reset DB or follow below to run seperately
+
 
 ```
 npx sequelize-cli db:create
