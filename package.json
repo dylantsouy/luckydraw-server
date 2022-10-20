@@ -21,7 +21,8 @@
         "morgan": "^1.10.0",
         "mysql2": "^2.3.3",
         "pg": "^8.8.0",
-        "sequelize": "^6.25.2"
+        "sequelize": "^6.25.2",
+        "uuid": "^9.0.0"
     },
     "devDependencies": {
         "cz-conventional-changelog": "^3.3.0",

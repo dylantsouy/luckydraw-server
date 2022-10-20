@@ -42,17 +42,51 @@ npm i
 Install the necessary package for project before start.
 
 ```
+npx sequelize-cli db:create
+```
+
+Sequelize CLI to create the database form config/config.json, and don't forget to edit db config before create
+
+```
+npx sequelize-cli db:migrate
+```
+
+Automatically creates both a model file and a migration with the attributes we’ve specified
+
+```
+npx sequelize-cli db:seed:all
+```
+
+run both seed files to add our fake data to the database
+
+```
 npm run dev
 ```
 
+Open [http://localhost:3000/api/](http://localhost:3000/api/) to connect it.
 
-Open [http://localhost:3000/api/](http://localhost:3000) to connect it.
-
-The page will reload if you make edits.
-You will also see any lint errors in the console.
+The api will reload if you make edits by using nodemon.
 
 ## 🎈 Usage <a name="usage"></a>
+In the project directory, you can run:
 
+```
+npx sequelize-cli db:drop
+```
+
+If you want to clear the db and migrations
+
+```
+npx sequelize-cli model:generate --name User --attributes email:string,password:string
+```
+
+If you want to generate model
+
+```
+npx sequelize-cli seed:generate --name users
+```
+
+If you want to generate seed
 
 ## 🚀 Deployment <a name = "deployment"></a>
 
