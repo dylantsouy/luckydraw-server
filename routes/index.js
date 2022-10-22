@@ -6,6 +6,7 @@ const WinningControllers = require('../controllers/winning');
 const AdminControllers = require('../controllers/admin');
 const uploadExcel = require('../middlewares/uploadExcel');
 const uploadImage = require('../middlewares/uploadImage');
+const verifyToken = require('../middlewares/authJwt')
 
 router
     .get('/users', [verifyToken], UserControllers.getAllUsers)
