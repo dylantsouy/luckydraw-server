@@ -3,8 +3,8 @@ const { errorHandler } = require('../helpers/responseHelper');
 
 const createWinning = async (req, res) => {
     try {
-        const result = await Winning.create(req.body);
-        return res.status(200).json({ result, success: true });
+        const data = await Winning.create(req.body);
+        return res.status(200).json({ data, success: true });
     } catch (error) {
         return res.status(500).json({ message: errorHandler(error), success: false });
     }
@@ -12,7 +12,7 @@ const createWinning = async (req, res) => {
 
 const getAllWinnings = async (req, res) => {
     try {
-        const result = await Winning.findAll({
+        const data = await Winning.findAll({
             include: [
                 { association: 'User', attributes: ['name', 'code'], paranoid: false },
                 {
@@ -22,7 +22,7 @@ const getAllWinnings = async (req, res) => {
                 },
             ],
         });
-        return res.status(200).json({ result, success: true });
+        return res.status(200).json({ data, success: true });
     } catch (error) {
         return res.status(500).send({ message: errorHandler(error), success: false });
     }

@@ -5,8 +5,8 @@ const readXlsxFile = require('read-excel-file/node');
 
 const createUser = async (req, res) => {
     try {
-        const result = await User.create(req.body);
-        return res.status(200).json({ result, success: true });
+        const data = await User.create(req.body);
+        return res.status(200).json({ data, success: true });
     } catch (error) {
         return res.status(500).json({ message: errorHandler(error), success: false });
     }
@@ -14,8 +14,8 @@ const createUser = async (req, res) => {
 
 const getAllUsers = async (req, res) => {
     try {
-        const result = await User.findAll();
-        return res.status(200).json({ result, success: true });
+        const data = await User.findAll();
+        return res.status(200).json({ data, success: true });
     } catch (error) {
         return res.status(500).send({ message: errorHandler(error), success: false });
     }
@@ -24,11 +24,11 @@ const getAllUsers = async (req, res) => {
 const getUserById = async (req, res) => {
     try {
         const { id } = req.params;
-        const result = await User.findOne({
+        const data = await User.findOne({
             where: { id },
         });
-        if (result) {
-            return res.status(200).json({ result, success: true });
+        if (data) {
+            return res.status(200).json({ data, success: true });
         }
         return res.status(400).send({
             message: 'ID does not exists',
@@ -51,11 +51,11 @@ const updateUser = async (req, res) => {
         const [updated] = await User.update(req.body, {
             where: { id },
         });
-        const result = await User.findOne({ where: { id } });
+        const data = await User.findOne({ where: { id } });
         if (updated) {
-            return res.status(200).json({ result, success: true });
+            return res.status(200).json({ data, success: true });
         } else {
-            if (result) {
+            if (data) {
                 return res.status(400).send({
                     message: "unexpected error",
                     success: false,

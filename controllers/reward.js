@@ -23,8 +23,8 @@ const uploadReward = async (req, res) => {
 
 const getAllRewards = async (req, res) => {
     try {
-        const result = await Reward.findAll();
-        return res.status(200).json({ result, success: true });
+        const data = await Reward.findAll();
+        return res.status(200).json({ data, success: true });
     } catch (error) {
         return res.status(500).send({ message: errorHandler(error), success: false });
     }
@@ -33,11 +33,11 @@ const getAllRewards = async (req, res) => {
 const getRewardById = async (req, res) => {
     try {
         const { id } = req.params;
-        const result = await result.findOne({
+        const data = await Reward.findOne({
             where: { id },
         });
-        if (result) {
-            return res.status(200).json({ result, success: true });
+        if (data) {
+            return res.status(200).json({ data, success: true });
         }
         return res.status(400).send({
             message: 'ID does not exists',
