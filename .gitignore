@@ -1,5 +1,5 @@
 node_modules
 .DS_Store
 .env
-resources\static\assets\tmp\*
-resources\static\assets\uploads\*
+/resources/static/assets/tmp/*
+/resources/static/assets/uploads/*
