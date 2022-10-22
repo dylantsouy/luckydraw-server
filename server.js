@@ -3,14 +3,16 @@ const logger = require('morgan');
 const cors = require('cors');
 const routes = require('./routes');
 const bodyParser = require('body-parser');
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 const app = express();
 
+const corsOptions = {
+    origin: `http://localhost:${PORT}`,
+};
 global.__basedir = __dirname;
 
 app.use(bodyParser.json());
-
-app.use(cors({origin:true,credentials: true}));
+app.use(cors(corsOptions));
 
 app.use('/api', routes);
 
