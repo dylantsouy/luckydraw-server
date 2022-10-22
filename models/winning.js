@@ -41,6 +41,8 @@ module.exports = (sequelize, DataTypes) => {
                     user.id = uuidv4();
                 },
             },
+            charset: 'utf8',
+            collate: 'utf8_general_ci', 
             sequelize,
             paranoid: true,
             modelName: 'Winning',
