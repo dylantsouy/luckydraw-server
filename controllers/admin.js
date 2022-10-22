@@ -32,7 +32,7 @@ const signin = async (req, res) => {
 
         if (!passwordIsValid) {
             return res.status(401).send({
-                accessToken: null,
+                token: null,
                 message: 'Invalid Password!',
                 success: false,
             });
@@ -47,8 +47,8 @@ const signin = async (req, res) => {
                 id: result.id,
                 username: result.username,
                 email: result.email,
-                accessToken: token,
             },
+            token,
             success: true,
         });
     } catch (error) {
