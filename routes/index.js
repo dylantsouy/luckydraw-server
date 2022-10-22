@@ -35,4 +35,5 @@ router
 
 router.post('/signup', AdminControllers.signup).post('/signin', AdminControllers.signin);
 
+
 module.exports = router;
