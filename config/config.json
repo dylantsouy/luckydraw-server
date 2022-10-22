@@ -14,10 +14,10 @@
     "dialect": "mysql"
   },
   "production": {
-    "username": "root",
-    "password": "0000",
-    "database": "lucky_draw",
-    "host": "127.0.0.1",
+    "username": "username",
+    "password": "password",
+    "database": "database",
+    "host": "host",
     "dialect": "mysql",
     "use_env_variable": "DATABASE_URL"
   }
