@@ -2,6 +2,7 @@ const express = require('express');
 const logger = require('morgan');
 const routes = require('./routes');
 const bodyParser = require('body-parser');
+const AdminControllers = require('../controllers/admin');
 const PORT = 3000;
 const app = express();
 
@@ -16,8 +17,7 @@ app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Headers", 'x-access-token, AcceptOrigin,X-Requested-With,Content-Type,Accept,content-type,application/json');
     next();
 });
-
-app.use('/api', routes);
+app.post('/signin', AdminControllers.signin);
 
 app.use(logger('dev'));
 
