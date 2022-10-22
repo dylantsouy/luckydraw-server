@@ -5,7 +5,6 @@ const routes = require('./routes');
 const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 3000;
 const app = express();
-const verifyToken = require('./middlewares/authJwt');
 
 global.__basedir = __dirname;
 
@@ -15,11 +14,7 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.all('/', function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'X-Requested-With');
-    next();
-});
+app.use(cors({origin:true,credentials: true}));
 
 app.use('/api', routes);
 
