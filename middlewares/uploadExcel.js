@@ -13,11 +13,10 @@ var storage = multer.diskStorage({
         cb(null, './resources/static/assets/uploads/');
     },
     filename: (req, file, cb) => {
-        console.log(file.originalname);
         cb(null, `${Date.now()}-${file.originalname}`);
     },
 });
 
-var uploadFile = multer({ storage: storage, fileFilter: excelFilter });
+var uploadExcel = multer({ storage: storage, fileFilter: excelFilter });
 
-module.exports = uploadFile;
+module.exports = uploadExcel;

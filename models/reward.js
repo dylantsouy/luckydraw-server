@@ -2,7 +2,7 @@
 const { Model } = require('sequelize');
 const { v4: uuidv4 } = require('uuid');
 module.exports = (sequelize, DataTypes) => {
-    class User extends Model {
+    class Reward extends Model {
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -10,13 +10,12 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            User.hasMany(models.Winning, {
-                foreignKey: 'userId',
-                onUpdate:"CASCADE"
+            Reward.hasMany(models.Winning, {
+                foreignKey: 'rewardId',
             });
         }
     }
-    User.init(
+    Reward.init(
         {
             name: {
                 type: DataTypes.STRING,
@@ -24,11 +23,11 @@ module.exports = (sequelize, DataTypes) => {
                     notEmpty: true,
                 },
             },
-            code: {
+            type: {
                 type: DataTypes.STRING,
-                validate: {
-                    notEmpty: true,
-                },
+            },
+            data: {
+                type: DataTypes.BLOB('long'),
             },
         },
         {
@@ -39,8 +38,8 @@ module.exports = (sequelize, DataTypes) => {
             },
             sequelize,
             paranoid: true,
-            modelName: 'User',
+            modelName: 'Reward',
         }
     );
-    return User;
+    return Reward;
 };

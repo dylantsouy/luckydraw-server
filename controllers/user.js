@@ -5,7 +5,6 @@ const readXlsxFile = require('read-excel-file/node');
 
 const createUser = async (req, res) => {
     try {
-        req.body.id = uuidv4();
         const result = await User.create(req.body);
         return res.status(200).json({ result, success: true });
     } catch (error) {
@@ -25,7 +24,7 @@ const getAllUsers = async (req, res) => {
 const getUserById = async (req, res) => {
     try {
         const { id } = req.params;
-        const result = await result.findOne({
+        const result = await User.findOne({
             where: { id },
         });
         if (result) {
@@ -58,7 +57,7 @@ const updateUser = async (req, res) => {
         } else {
             if (result) {
                 return res.status(400).send({
-                    message: 'Error',
+                    message: "unexpected error",
                     success: false,
                 });
             } else {
@@ -120,7 +119,7 @@ const deleteAllUser = async (req, res) => {
     }
 };
 
-const uploaduser = async (req, res) => {
+const uploadUser = async (req, res) => {
     try {
         if (req.file == undefined) {
             return res.status(400).send('Please upload an excel file!');
@@ -142,19 +141,20 @@ const uploaduser = async (req, res) => {
                 .then(() => {
                     res.status(200).send({
                         message: 'Uploaded the file successfully: ' + req.file.originalname,
+                        success: true,
                     });
                 })
                 .catch((error) => {
                     res.status(500).send({
                         message: 'Fail to import data into database!',
-                        error: error.message,
+                        success: false,
                     });
                 });
         });
     } catch (error) {
-        console.log(error);
         res.status(500).send({
             message: 'Could not upload the file: ' + req.file.originalname,
+            success: false,
         });
     }
 };
@@ -167,5 +167,5 @@ module.exports = {
     deleteUser,
     deleteUsers,
     deleteAllUser,
-    uploaduser
+    uploadUser
 };
