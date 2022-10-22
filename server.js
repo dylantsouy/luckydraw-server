@@ -9,17 +9,17 @@ const verifyToken = require('./middlewares/authJwt');
 
 global.__basedir = __dirname;
 
-// const corsOptions = {
-//     origin: `http://localhost:${PORT}`,
-// };
-
 app.use(bodyParser.json());
 app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Headers', 'x-access-token, Origin, Content-Type, Accept');
     next();
 });
 
-app.use(cors({ origin: 'http://localhost:3000' , credentials :  true}));
+app.all('/', function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'X-Requested-With');
+    next();
+});
 
 app.use('/api', routes);
 
