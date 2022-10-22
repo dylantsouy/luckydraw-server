@@ -25,7 +25,7 @@ const signin = async (req, res) => {
             },
         });
         if (!data) {
-            return res.status(400).send({ message: 'username error', success: false });
+            return res.status(400).send({ message: 'Username Error', success: false });
         }
 
         let passwordIsValid = bcrypt.compareSync(req.body.password, data.password);
@@ -33,7 +33,7 @@ const signin = async (req, res) => {
         if (!passwordIsValid) {
             return res.status(401).send({
                 token: null,
-                message: 'Invalid Password!',
+                message: 'Invalid Password',
                 success: false,
             });
         }
