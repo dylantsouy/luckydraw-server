@@ -16,8 +16,6 @@ module.exports = {
             code: {
                 allowNull: false,
                 type: Sequelize.STRING(10),
-                unique: true,
-                noUpdate : false
             },
             createdAt: {
                 allowNull: false,
