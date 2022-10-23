@@ -42,7 +42,7 @@ const getUserById = async (req, res) => {
 const updateUser = async (req, res) => {
     try {
         const { id } = req.params;
-        if (req.body.id) {
+        if (req?.body?.id !== id) {
             return res.status(400).send({
                 message: "Can't update id",
                 success: false,
