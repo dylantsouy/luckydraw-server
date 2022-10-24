@@ -12,7 +12,6 @@ const uploadReward = async (req, res) => {
         }
         Reward.create({
             type: req.file.mimetype,
-            size: req.file.size,
             name: req.body.name,
             data: fs.readFileSync(__basedir + '/resources/static/assets/uploads/' + req.file.filename),
         }).then((image) => {
