@@ -55,7 +55,97 @@ const signin = async (req, res) => {
         return res.status(500).json({ message: errorHandler(error), success: false });
     }
 };
+
+
+const getAllAdmins = async (req, res) => {
+    try {
+        const data = await Admin.findAll();
+        return res.status(200).json({ data, success: true });
+    } catch (error) {
+        return res.status(500).send({ message: errorHandler(error), success: false });
+    }
+};
+
+const updateAdmin = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const [updated] = await Admin.update(req.body, {
+            where: { id },
+        });
+        const data = await Admin.findOne({ where: { id } });
+        if (updated) {
+            return res.status(200).json({ data, success: true });
+        } else {
+            if (data) {
+                return res.status(400).send({
+                    message: 'unexpected error',
+                    success: false,
+                });
+            } else {
+                return res.status(400).send({
+                    message: 'ID does not exists',
+                    success: false,
+                });
+            }
+        }
+    } catch (error) {
+        return res.status(500).send({ message: errorHandler(error), success: false });
+    }
+};
+
+const deleteAdmin = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const deleted = await Admin.destroy({
+            where: { id },
+        });
+        if (deleted) {
+            return res.status(200).send({ message: 'Successful deleted', success: true });
+        }
+        return res.status(400).send({
+            message: 'ID does not exists',
+            success: false,
+        });
+    } catch (error) {
+        return res.status(500).send({ message: errorHandler(error), success: false });
+    }
+};
+
+const deleteAdmins = async (req, res) => {
+    try {
+        const { ids } = req.body;
+        const deleted = await Admin.destroy({
+            where: { id: ids },
+        });
+        if (deleted) {
+            return res.status(200).send({ message: 'Successful deleted', success: true });
+        }
+        return res.status(400).send({
+            message: 'ID does not exists',
+            success: false,
+        });
+    } catch (error) {
+        return res.status(500).send({ message: errorHandler(error), success: false });
+    }
+};
+
+const deleteAllAdmin = async (req, res) => {
+    try {
+        await Admin.destroy({
+            truncate: true,
+        });
+        return res.status(200).send({ message: 'Successful deleted', success: true });
+    } catch (error) {
+        return res.status(500).send({ message: errorHandler(error), success: false });
+    }
+};
+
 module.exports = {
     signup,
     signin,
+    getAllAdmins,
+    deleteAllAdmin,
+    updateAdmin,
+    deleteAdmin,
+    deleteAdmins
 };

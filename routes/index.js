@@ -35,5 +35,12 @@ router
 
 router.post('/signup', AdminControllers.signup).post('/signin', AdminControllers.signin);
 
+router
+    .get('/admins', [verifyToken], AdminControllers.getAllAdmins)
+    .put('/admins/:id', [verifyToken], AdminControllers.updateAdmin)
+    .delete('/admins/:id', [verifyToken], AdminControllers.deleteAdmin)
+    .post('/admins/deleteAdmins', [verifyToken], AdminControllers.deleteAdmins)
+    .post('/admins/deleteAll', [verifyToken], AdminControllers.deleteAllAdmin);
+
 
 module.exports = router;

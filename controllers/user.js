@@ -51,7 +51,7 @@ const updateUser = async (req, res) => {
         } else {
             if (data) {
                 return res.status(400).send({
-                    message: "unexpected error",
+                    message: 'unexpected error',
                     success: false,
                 });
             } else {
@@ -161,5 +161,5 @@ module.exports = {
     deleteUser,
     deleteUsers,
     deleteAllUser,
-    uploadUser
+    uploadUser,
 };
