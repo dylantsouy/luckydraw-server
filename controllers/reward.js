@@ -1,23 +1,27 @@
 const { Reward } = require('../models');
 const { errorHandler } = require('../helpers/responseHelper');
-const fs = require("fs");
+const fs = require('fs');
 
 const uploadReward = async (req, res) => {
     try {
+        if(!req.body?.name){
+            return res.status(400).json({ message: 'Name is required', success: false });
+        }
         if (req.file == undefined) {
-            return  res.status(400).json({ message: 'You must select a file.', success: false });
+            return res.status(400).json({ message: 'You must select a file.', success: false });
         }
         Reward.create({
             type: req.file.mimetype,
-            name: req.file.originalname,
+            size: req.file.size,
+            name: req.body.name,
             data: fs.readFileSync(__basedir + '/resources/static/assets/uploads/' + req.file.filename),
         }).then((image) => {
             fs.writeFileSync(__basedir + '/resources/static/assets/tmp/' + image.name, image.data);
 
-            return  res.status(200).json({ message: 'Reward has been uploaded.', success: true });
+            return res.status(200).json({ message: 'Reward has been uploaded.', success: true });
         });
     } catch (error) {
-        return  res.status(500).json({ message: `Error when trying upload images: ${error}`, success: false });
+        return res.status(500).json({ message: `Error when trying upload images: ${error}`, success: false });
     }
 };
 
