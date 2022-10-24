@@ -7,6 +7,8 @@ var bcrypt = require('bcryptjs');
 
 const signup = async (req, res) => {
     try {
+        if (!/^[a-z0-9]{8,50}$/i.test(req?.body?.password))
+            return res.status(400).json({ message: "Validation is on password failed", success: false });
         req.body.password = bcrypt.hashSync(req.body.password, 8);
         await Admin.create(req.body);
         return res.status(200).json({ message:"Successful Created", success: true });
@@ -67,6 +69,8 @@ const getAllAdmins = async (req, res) => {
 const updateAdmin = async (req, res) => {
     try {
         const { id } = req.params;
+        if (!/^[a-z0-9]{8,50}$/i.test(req?.body?.password))
+            return res.status(400).json({ message: "Validation is on password failed", success: false });
         req.body.password = bcrypt.hashSync(req.body.password, 8);
         const [updated] = await Admin.update(req.body, {
             where: { id },
