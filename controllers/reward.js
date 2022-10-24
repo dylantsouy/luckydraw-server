@@ -4,15 +4,13 @@ const fs = require('fs');
 
 const uploadReward = async (req, res) => {
     try {
-        if(!req.body?.name){
-            return res.status(400).json({ message: 'Name is required', success: false });
-        }
         if (req.file == undefined) {
             return res.status(400).json({ message: 'You must select a file.', success: false });
         }
         Reward.create({
             type: req.file.mimetype,
             name: req.body.name,
+            path: req.file.filename,
             data: fs.readFileSync(__basedir + '/resources/static/assets/uploads/' + req.file.filename),
         }).then((image) => {
             fs.writeFileSync(__basedir + '/resources/static/assets/tmp/' + image.name, image.data);
