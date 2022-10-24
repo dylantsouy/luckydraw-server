@@ -16,6 +16,9 @@ module.exports = {
             type: {
                 type: Sequelize.STRING,
             },
+            path: {
+                type: DataTypes.STRING,
+            },
             data: {
                 type: Sequelize.BLOB('long'),
             },
