@@ -6,7 +6,7 @@ const WinningControllers = require('../controllers/winning');
 const AdminControllers = require('../controllers/admin');
 const uploadExcel = require('../middlewares/uploadExcel');
 const uploadImage = require('../middlewares/uploadImage');
-const verifyToken = require('../middlewares/authJwt')
+const verifyToken = require('../middlewares/authJwt');
 
 router
     .get('/users', [verifyToken], UserControllers.getAllUsers)
@@ -25,7 +25,8 @@ router
     .delete('/rewards/:id', [verifyToken], RewardControllers.deleteReward)
     .put('/rewards/:id', [verifyToken], RewardControllers.updateReward)
     .post('/rewards/deleteRewards', [verifyToken], RewardControllers.deleteRewards)
-    .post('/rewards/deleteAll', [verifyToken], RewardControllers.deleteAllReward);
+    .post('/rewards/deleteAll', [verifyToken], RewardControllers.deleteAllReward)
+    .post('/rewards/createAdditionalReward', [verifyToken], RewardControllers.createAdditionalReward);
 
 router
     .get('/winnings', [verifyToken], WinningControllers.getAllWinnings)
@@ -42,6 +43,5 @@ router
     .delete('/admins/:id', [verifyToken], AdminControllers.deleteAdmin)
     .post('/admins/deleteAdmins', [verifyToken], AdminControllers.deleteAdmins)
     .post('/admins/deleteAll', [verifyToken], AdminControllers.deleteAllAdmin);
-
 
 module.exports = router;

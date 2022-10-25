@@ -36,7 +36,7 @@ const uploadReward = async (req, res) => {
         cloudinary.uploader.upload(req.file.path, { public_id: id }, async (error, result) => {
             if (result?.url) {
                 let createResult = await Reward.create({
-                    id: id,
+                    id,
                     name: req.body.name,
                     size: result.bytes,
                     count: req.body.count,
@@ -55,6 +55,42 @@ const uploadReward = async (req, res) => {
     }
 };
 
+const createAdditionalReward = async (req, res) => {
+    try {
+        if (!req.body.name) {
+            return res.status(400).json({ message: 'Name is required', success: false });
+        }
+        if (!req.body.count) {
+            return res.status(400).json({ message: 'Count is required', success: false });
+        }
+        if (!req.body.order) {
+            return res.status(400).json({ message: 'Order is required', success: false });
+        }
+        if (!numberRegex(req.body.count)) {
+            return res.status(400).json({ message: 'Count should be number', success: false });
+        }
+        if (!numberRegex(req.body.order)) {
+            return res.status(400).json({ message: 'Order should be number', success: false });
+        }
+        let id = uuidv4();
+        let createResult = await Reward.create({
+            id,
+            name: req.body.name,
+            size: 0,
+            count: req.body.count,
+            order: req.body.order,
+            url: '',
+            winning: req.body.winning,
+        });
+        if (createResult) {
+            return res.status(200).json({ message: 'Reward has been uploaded.', success: true });
+        }
+        return res.status(500).json({ message: `Error when trying upload images`, success: false });
+    } catch (error) {
+        return res.status(500).json({ message: `Error when trying upload images: ${error}`, success: false });
+    }
+};
+
 const updateReward = async (req, res) => {
     try {
         const { id } = req.params;
@@ -62,9 +98,12 @@ const updateReward = async (req, res) => {
         const updateData = await Reward.findOne({ where: { id } });
         const orderData = await Reward.findOne({ where: { order, id: { [Op.not]: id } } });
         if (orderData) {
-            await Reward.update({order:updateData.order}, {
-                where: { id: orderData.id },
-            });
+            await Reward.update(
+                { order: updateData.order },
+                {
+                    where: { id: orderData.id },
+                }
+            );
         }
         const [updated] = await Reward.update(req.body, {
             where: { id },
@@ -172,4 +211,5 @@ module.exports = {
     deleteRewards,
     deleteAllReward,
     updateReward,
+    createAdditionalReward
 };
