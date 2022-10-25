@@ -6,7 +6,7 @@
     "author": "Dylan Tsou",
     "license": "ISC",
     "scripts": {
-        "heroku-postbuild": "npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
+        "heroku-postbuild": "npx sequelize-cli db:migrate",
         "start": "node server.js",
         "dev": "nodemon server.js",
         "db:reset": "npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
