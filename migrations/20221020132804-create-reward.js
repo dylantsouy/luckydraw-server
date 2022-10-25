@@ -13,14 +13,26 @@ module.exports = {
                 allowNull: false,
                 type: Sequelize.STRING,
             },
-            type: {
+            name: {
+                allowNull: false,
                 type: Sequelize.STRING,
             },
-            path: {
+            size: {
+                type: Sequelize.INTEGER,
+            },
+            count: {
+                allowNull: false,
+                type: Sequelize.INTEGER,
+            },
+            order: {
+                allowNull: false,
+                type: Sequelize.INTEGER,
+            },
+            url: {
                 type: Sequelize.STRING,
             },
-            data: {
-                type: Sequelize.BLOB('long'),
+            winning: {
+                type: Sequelize.JSON,
             },
             createdAt: {
                 allowNull: false,

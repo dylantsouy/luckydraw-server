@@ -23,22 +23,29 @@ module.exports = (sequelize, DataTypes) => {
                     notEmpty: true,
                 },
             },
-            type: {
+            size: {
+                type: DataTypes.INTEGER,
+            },
+            count: {
+                type: DataTypes.INTEGER,
+                validate: {
+                    notEmpty: true,
+                },
+            },
+            order: {
+                type: DataTypes.INTEGER,
+                validate: {
+                    notEmpty: true,
+                },
+            },
+            url: {
                 type: DataTypes.STRING,
             },
-            path: {
-                type: DataTypes.STRING,
-            },
-            data: {
-                type: DataTypes.BLOB('long'),
+            winning: {
+                type: DataTypes.JSON,
             },
         },
         {
-            hooks: {
-                beforeCreate: (user) => {
-                    user.id = uuidv4();
-                },
-            },
             charset: 'utf8',
             collate: 'utf8_general_ci',
             sequelize,

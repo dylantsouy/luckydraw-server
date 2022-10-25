@@ -1,24 +1,92 @@
 const { Reward } = require('../models');
 const { errorHandler } = require('../helpers/responseHelper');
-const fs = require('fs');
+const cloudinary = require('cloudinary').v2;
+const { v4: uuidv4 } = require('uuid');
+const { numberRegex } = require('../helpers/regex');
+const { Op } = require('sequelize');
+require('dotenv').config();
+
+cloudinary.config({
+    cloud_name: process.env['CLOUDINARY_CLOUD_NAME'],
+    api_key: process.env['CLOUDINARY_API_KEY'],
+    api_secret: process.env['CLOUDINARY_API_SECRECT'],
+});
 
 const uploadReward = async (req, res) => {
     try {
         if (req.file == undefined) {
             return res.status(400).json({ message: 'You must select a file.', success: false });
         }
-        Reward.create({
-            type: req.file.mimetype,
-            name: req.body.name,
-            path: req.file.filename,
-            data: fs.readFileSync(__basedir + '/resources/static/assets/uploads/' + req.file.filename),
-        }).then((image) => {
-            fs.writeFileSync(__basedir + '/resources/static/assets/tmp/' + image.name, image.data);
-
-            return res.status(200).json({ message: 'Reward has been uploaded.', success: true });
+        if (!req.body.name) {
+            return res.status(400).json({ message: 'Name is required', success: false });
+        }
+        if (!req.body.count) {
+            return res.status(400).json({ message: 'Count is required', success: false });
+        }
+        if (!req.body.order) {
+            return res.status(400).json({ message: 'Order is required', success: false });
+        }
+        if (!numberRegex(req.body.count)) {
+            return res.status(400).json({ message: 'Count should be number', success: false });
+        }
+        if (!numberRegex(req.body.order)) {
+            return res.status(400).json({ message: 'Order should be number', success: false });
+        }
+        let id = uuidv4();
+        cloudinary.uploader.upload(req.file.path, { public_id: id }, async (error, result) => {
+            if (result?.url) {
+                let createResult = await Reward.create({
+                    id: id,
+                    name: req.body.name,
+                    size: result.bytes,
+                    count: req.body.count,
+                    order: req.body.order,
+                    url: result.url,
+                    winning: req.body.winning,
+                });
+                if (createResult) {
+                    return res.status(200).json({ message: 'Reward has been uploaded.', success: true });
+                }
+                return res.status(500).json({ message: `Error when trying upload images: ${error}`, success: false });
+            }
         });
     } catch (error) {
         return res.status(500).json({ message: `Error when trying upload images: ${error}`, success: false });
+    }
+};
+
+const updateReward = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { order } = req.body;
+        const updateData = await Reward.findOne({ where: { id } });
+        const orderData = await Reward.findOne({ where: { order, id: { [Op.not]: id } } });
+        if (orderData) {
+            await Reward.update({order:updateData.order}, {
+                where: { id: orderData.id },
+            });
+        }
+        const [updated] = await Reward.update(req.body, {
+            where: { id },
+        });
+        const data = await Reward.findOne({ where: { id } });
+        if (updated) {
+            return res.status(200).json({ message: 'update success', success: true });
+        } else {
+            if (data) {
+                return res.status(400).send({
+                    message: 'unexpected error',
+                    success: false,
+                });
+            } else {
+                return res.status(400).send({
+                    message: 'ID does not exists',
+                    success: false,
+                });
+            }
+        }
+    } catch (error) {
+        return res.status(500).send({ message: errorHandler(error), success: false });
     }
 };
 
@@ -103,4 +171,5 @@ module.exports = {
     deleteReward,
     deleteRewards,
     deleteAllReward,
+    updateReward,
 };

@@ -23,6 +23,7 @@ router
     .get('/rewards/:id', [verifyToken], RewardControllers.getRewardById)
     .post('/rewards', [verifyToken], uploadImage.single('file'), RewardControllers.uploadReward)
     .delete('/rewards/:id', [verifyToken], RewardControllers.deleteReward)
+    .put('/rewards/:id', [verifyToken], RewardControllers.updateReward)
     .post('/rewards/deleteRewards', [verifyToken], RewardControllers.deleteRewards)
     .post('/rewards/deleteAll', [verifyToken], RewardControllers.deleteAllReward);
 
