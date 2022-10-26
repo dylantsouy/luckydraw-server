@@ -131,7 +131,9 @@ const updateReward = async (req, res) => {
 
 const getAllRewards = async (req, res) => {
     try {
-        const data = await Reward.findAll();
+        const data = await Reward.findAll({
+            order: [['order', 'ASC']],
+        });
         return res.status(200).json({ data, success: true });
     } catch (error) {
         return res.status(500).send({ message: errorHandler(error), success: false });
@@ -211,5 +213,5 @@ module.exports = {
     deleteRewards,
     deleteAllReward,
     updateReward,
-    createAdditionalReward
+    createAdditionalReward,
 };
