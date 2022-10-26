@@ -21,6 +21,15 @@ const getAllUsers = async (req, res) => {
     }
 };
 
+const getUserCount = async (req, res) => {
+    try {
+        const data = await User.count();
+        return res.status(200).json({ data, success: true });
+    } catch (error) {
+        return res.status(500).send({ message: errorHandler(error), success: false });
+    }
+};
+
 const getUserById = async (req, res) => {
     try {
         const { id } = req.params;
@@ -162,4 +171,5 @@ module.exports = {
     deleteUsers,
     deleteAllUser,
     uploadUser,
+    getUserCount
 };

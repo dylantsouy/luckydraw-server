@@ -16,7 +16,8 @@ router
     .put('/users/:id', [verifyToken], UserControllers.updateUser)
     .delete('/users/:id', [verifyToken], UserControllers.deleteUser)
     .post('/users/deleteUsers', [verifyToken], UserControllers.deleteUsers)
-    .post('/users/deleteAll', [verifyToken], UserControllers.deleteAllUser);
+    .post('/users/deleteAll', [verifyToken], UserControllers.deleteAllUser)
+    .post('/users/count', [verifyToken], UserControllers.getUserCount);
 
 router
     .get('/rewards', [verifyToken], RewardControllers.getAllRewards)
@@ -26,7 +27,9 @@ router
     .put('/rewards/:id', [verifyToken], RewardControllers.updateReward)
     .post('/rewards/deleteRewards', [verifyToken], RewardControllers.deleteRewards)
     .post('/rewards/deleteAll', [verifyToken], RewardControllers.deleteAllReward)
-    .post('/rewards/createAdditionalReward', [verifyToken], RewardControllers.createAdditionalReward);
+    .post('/rewards/createAdditionalReward', [verifyToken], RewardControllers.createAdditionalReward)
+    .post('/rewards/updateWinningResult/:id', [verifyToken], RewardControllers.updateWinningResult)
+    .post('/rewards/count', [verifyToken], RewardControllers.getRewardCount);
 
 router
     .get('/winnings', [verifyToken], WinningControllers.getAllWinnings)

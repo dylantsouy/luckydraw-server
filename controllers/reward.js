@@ -129,6 +129,35 @@ const updateReward = async (req, res) => {
     }
 };
 
+const updateWinningResult = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { winnig } = req.body;
+        console.log(req.body);
+        const [updated] = await Reward.update(req.body, {
+            where: { id },
+        });
+        const data = await Reward.findOne({ where: { id } });
+        if (updated) {
+            return res.status(200).json({ message: 'update success', success: true });
+        } else {
+            if (data) {
+                return res.status(400).send({
+                    message: 'unexpected error',
+                    success: false,
+                });
+            } else {
+                return res.status(400).send({
+                    message: 'ID does not exists',
+                    success: false,
+                });
+            }
+        }
+    } catch (error) {
+        return res.status(500).send({ message: errorHandler(error), success: false });
+    }
+};
+
 const getAllRewards = async (req, res) => {
     try {
         const data = await Reward.findAll({
@@ -205,6 +234,15 @@ const deleteAllReward = async (req, res) => {
     }
 };
 
+const getRewardCount = async (req, res) => {
+    try {
+        const data = await Reward.count();
+        return res.status(200).json({ data, success: true });
+    } catch (error) {
+        return res.status(500).send({ message: errorHandler(error), success: false });
+    }
+};
+
 module.exports = {
     uploadReward,
     getAllRewards,
@@ -214,4 +252,6 @@ module.exports = {
     deleteAllReward,
     updateReward,
     createAdditionalReward,
+    updateWinningResult,
+    getRewardCount
 };
