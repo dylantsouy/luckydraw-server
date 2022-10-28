@@ -47,7 +47,7 @@ const signin = async (req, res) => {
                 id: data.id,
                 username: data.username,
                 email: data.email,
-                role: req.body.role,
+                role: data.role,
             },
             token,
             success: true,
