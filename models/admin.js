@@ -34,6 +34,12 @@ module.exports = (sequelize, DataTypes) => {
                     isEmail: true,
                 },
             },
+            role: {
+                type: DataTypes.INTEGER,
+                validate: {
+                    notEmpty: true,
+                },
+            },
         },
         {
             hooks: {

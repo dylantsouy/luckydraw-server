@@ -4,9 +4,12 @@ const UserControllers = require('../controllers/user');
 const RewardControllers = require('../controllers/reward');
 const WinningControllers = require('../controllers/winning');
 const AdminControllers = require('../controllers/admin');
+const SettingControllers = require('../controllers/setting');
 const uploadExcel = require('../middlewares/uploadExcel');
 const uploadImage = require('../middlewares/uploadImage');
 const verifyToken = require('../middlewares/authJwt');
+
+router.post('/signup', AdminControllers.signup).post('/signin', AdminControllers.signin);
 
 router
     .get('/users', [verifyToken], UserControllers.getAllUsers)
@@ -38,13 +41,16 @@ router
     .post('/winnings/deleteAll', [verifyToken], WinningControllers.deleteAllWinning)
     .post('/winnings', WinningControllers.createWinning);
 
-router.post('/signup', AdminControllers.signup).post('/signin', AdminControllers.signin);
-
 router
     .get('/admins', [verifyToken], AdminControllers.getAllAdmins)
     .put('/admins/:id', [verifyToken], AdminControllers.updateAdmin)
     .delete('/admins/:id', [verifyToken], AdminControllers.deleteAdmin)
     .post('/admins/deleteAdmins', [verifyToken], AdminControllers.deleteAdmins)
     .post('/admins/deleteAll', [verifyToken], AdminControllers.deleteAllAdmin);
+
+router
+    .get('/settings', [verifyToken], SettingControllers.getSettingById)
+    .post('/settings', [verifyToken], SettingControllers.createSetting)
+    .put('/settings', [verifyToken], SettingControllers.updateSetting);
 
 module.exports = router;
