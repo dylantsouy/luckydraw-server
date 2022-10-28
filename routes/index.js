@@ -51,6 +51,6 @@ router
 router
     .get('/settings', [verifyToken], SettingControllers.getSettingById)
     .post('/settings', [verifyToken], SettingControllers.createSetting)
-    .put('/settings', [verifyToken], SettingControllers.updateSetting);
+    .post('/settings/update', [verifyToken], uploadImage.single('file'), SettingControllers.updateSetting);
 
 module.exports = router;
