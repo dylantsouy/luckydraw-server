@@ -34,6 +34,7 @@ const signin = async (req, res) => {
             return res.status(401).send({
                 token: null,
                 message: 'Invalid Password',
+                role: req.body.role,
                 success: false,
             });
         }
