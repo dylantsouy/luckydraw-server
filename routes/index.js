@@ -45,6 +45,7 @@ router
 router
     .get('/admins', [verifyToken], AdminControllers.getAllAdmins)
     .put('/admins/:id', [verifyToken], AdminControllers.updateAdmin)
+    .post('/admins/updatePassword', [verifyToken], AdminControllers.updateAdminPassword)
     .delete('/admins/:id', [verifyToken], AdminControllers.deleteAdmin)
     .post('/admins/deleteAdmins', [verifyToken], AdminControllers.deleteAdmins)
     .post('/admins/deleteAll', [verifyToken], AdminControllers.deleteAllAdmin);

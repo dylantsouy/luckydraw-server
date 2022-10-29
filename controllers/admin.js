@@ -70,6 +70,33 @@ const getAllAdmins = async (req, res) => {
 const updateAdmin = async (req, res) => {
     try {
         const { id } = req.params;
+        const [updated] = await Admin.update(req.body, {
+            where: { id },
+        });
+        const data = await Admin.findOne({ where: { id } });
+        if (updated) {
+            return res.status(200).json({ data, success: true });
+        } else {
+            if (data) {
+                return res.status(400).send({
+                    message: 'unexpected error',
+                    success: false,
+                });
+            } else {
+                return res.status(400).send({
+                    message: 'ID does not exists',
+                    success: false,
+                });
+            }
+        }
+    } catch (error) {
+        return res.status(500).send({ message: errorHandler(error), success: false });
+    }
+};
+
+const updateAdminPassword = async (req, res) => {
+    try {
+        const { id } = req.body;
         if (!/^[a-z0-9]{8,50}$/i.test(req?.body?.password))
             return res.status(400).json({ message: "Validation is on password failed", success: false });
         req.body.password = bcrypt.hashSync(req.body.password, 8);
@@ -96,7 +123,6 @@ const updateAdmin = async (req, res) => {
         return res.status(500).send({ message: errorHandler(error), success: false });
     }
 };
-
 const deleteAdmin = async (req, res) => {
     try {
         const { id } = req.params;
@@ -151,5 +177,6 @@ module.exports = {
     deleteAllAdmin,
     updateAdmin,
     deleteAdmin,
-    deleteAdmins
+    deleteAdmins,
+    updateAdminPassword
 };
