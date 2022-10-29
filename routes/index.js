@@ -32,7 +32,8 @@ router
     .post('/rewards/deleteAll', [verifyToken], RewardControllers.deleteAllReward)
     .post('/rewards/createAdditionalReward', [verifyToken], RewardControllers.createAdditionalReward)
     .post('/rewards/updateWinningResult/:id', [verifyToken], RewardControllers.updateWinningResult)
-    .post('/rewards/count', [verifyToken], RewardControllers.getRewardCount);
+    .post('/rewards/count', [verifyToken], RewardControllers.getRewardCount)
+    .post('/rewards/getNoWinningsRewards', [verifyToken], RewardControllers.getNoWinningsRewards)
 
 router
     .get('/winnings', [verifyToken], WinningControllers.getAllWinnings)

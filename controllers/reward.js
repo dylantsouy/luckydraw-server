@@ -132,8 +132,6 @@ const updateReward = async (req, res) => {
 const updateWinningResult = async (req, res) => {
     try {
         const { id } = req.params;
-        const { winnig } = req.body;
-        console.log(req.body);
         const [updated] = await Reward.update(req.body, {
             where: { id },
         });
@@ -161,6 +159,18 @@ const updateWinningResult = async (req, res) => {
 const getAllRewards = async (req, res) => {
     try {
         const data = await Reward.findAll({
+            order: [['order', 'ASC']],
+        });
+        return res.status(200).json({ data, success: true });
+    } catch (error) {
+        return res.status(500).send({ message: errorHandler(error), success: false });
+    }
+};
+
+const getNoWinningsRewards = async (req, res) => {
+    try {
+        const data = await Reward.findAll({
+            where: { winning: { [Op.is]: null } },
             order: [['order', 'ASC']],
         });
         return res.status(200).json({ data, success: true });
@@ -236,7 +246,7 @@ const deleteAllReward = async (req, res) => {
 
 const getRewardCount = async (req, res) => {
     try {
-        const data = await Reward.count();
+        const data = await Reward.count({ where: { winning: { [Op.is]: null } } });
         return res.status(200).json({ data, success: true });
     } catch (error) {
         return res.status(500).send({ message: errorHandler(error), success: false });
@@ -253,5 +263,6 @@ module.exports = {
     updateReward,
     createAdditionalReward,
     updateWinningResult,
-    getRewardCount
+    getRewardCount,
+    getNoWinningsRewards,
 };
