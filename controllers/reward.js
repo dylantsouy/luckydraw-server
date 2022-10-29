@@ -1,4 +1,4 @@
-const { Reward } = require('../models');
+const { Reward, sequelize } = require('../models');
 const { errorHandler } = require('../helpers/responseHelper');
 const cloudinary = require('cloudinary').v2;
 const { v4: uuidv4 } = require('uuid');
@@ -246,7 +246,10 @@ const deleteAllReward = async (req, res) => {
 
 const getRewardCount = async (req, res) => {
     try {
-        const data = await Reward.count({ where: { winning: { [Op.is]: null } } });
+        const data = await Reward.findAll({
+            where: { winning: { [Op.is]: null } },
+            attributes: [[sequelize.fn('sum', sequelize.col('count')), 'count']],
+        });
         return res.status(200).json({ data, success: true });
     } catch (error) {
         return res.status(500).send({ message: errorHandler(error), success: false });
