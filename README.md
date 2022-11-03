@@ -1,10 +1,10 @@
-<!-- <p align="center">
+<p align="center">
   <a href="" rel="noopener">
- <img width=400px height=210px src="" alt="Project logo"></a>
-</p> -->
+ <img width=400px height=210px src="https://i.imgur.com/D7lZnjb.png" alt="Project logo"></a>
+</p> 
 
 <h3 align="center">Luckydraw-server</h3>
-<p align="center">https://luckydraw-server.herokuapp.com/api/
+<p align="center">https://dylantsouy.github.io/luckydraw-frontend/#/login
 </p>
 
 
