@@ -10,6 +10,10 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
+            Admin.belongsTo(models.Company, {
+                foreignKey: 'companyId',
+                onDelete: 'CASCADE',
+            });
         }
     }
     Admin.init(
@@ -40,11 +44,17 @@ module.exports = (sequelize, DataTypes) => {
                     notEmpty: true,
                 },
             },
+            companyId: {
+                type: DataTypes.UUID,
+                validate: {
+                    notEmpty: true,
+                },
+            },
         },
         {
             hooks: {
-                beforeCreate: (user) => {
-                    user.id = uuidv4();
+                beforeCreate: (data) => {
+                    data.id = uuidv4();
                 },
             },
             charset: 'utf8',

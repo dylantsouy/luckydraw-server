@@ -5,9 +5,8 @@ module.exports = {
     await queryInterface.createTable('Settings', {
       id: {
         allowNull: false,
-        autoIncrement: false,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID,
       },
       background: {
         type: Sequelize.STRING
@@ -23,6 +22,16 @@ module.exports = {
       },
       textColor: {
         type: Sequelize.STRING
+      },
+      companyId: {
+        allowNull: false,
+        type: Sequelize.UUID,
+        onDelete: 'CASCADE',
+        references: {
+          model: 'Companies',
+          key: 'id',
+          as: 'companyId',
+        }
       },
       createdAt: {
         allowNull: false,

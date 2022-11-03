@@ -13,8 +13,9 @@ const createUser = async (req, res) => {
 };
 
 const getAllUsers = async (req, res) => {
+    const { companyId } = req.params;
     try {
-        const data = await User.findAll();
+        const data = await User.findAll({ where: { companyId } });
         return res.status(200).json({ data, success: true });
     } catch (error) {
         return res.status(500).send({ message: errorHandler(error), success: false });
@@ -127,6 +128,9 @@ const uploadUser = async (req, res) => {
         if (req.file == undefined) {
             return res.status(400).send('Please upload an excel file!');
         }
+        if(req.file.size > 1048576){
+            return res.status(400).json({ message: 'File size over 1MB', success: false });
+        }
         let path = './resources/static/assets/uploads/' + req.file.filename;
         readXlsxFile(path).then((rows) => {
             // skip header
@@ -137,6 +141,7 @@ const uploadUser = async (req, res) => {
                     id: uuidv4(),
                     code: row[0],
                     name: row[1],
+                    companyId: req.body.companyId,
                 };
                 users.push(user);
             });
@@ -149,7 +154,7 @@ const uploadUser = async (req, res) => {
                 })
                 .catch((error) => {
                     res.status(500).send({
-                        message: 'Fail to import data into database!',
+                        message: error,
                         success: false,
                     });
                 });

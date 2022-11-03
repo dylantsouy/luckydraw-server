@@ -11,8 +11,10 @@ const createWinning = async (req, res) => {
 };
 
 const getAllWinnings = async (req, res) => {
+    const { companyId } = req.params;
     try {
         const data = await Winning.findAll({
+            where: { companyId },
             include: [
                 { association: 'User', attributes: ['name', 'code'], paranoid: false },
                 {
@@ -65,9 +67,10 @@ const deleteWinnings = async (req, res) => {
 };
 
 const deleteAllWinning = async (req, res) => {
+    const { companyId } = req.body;
     try {
         await Winning.destroy({
-            truncate: true,
+            where: { companyId },
         });
         return res.status(200).send({ message: 'Successful deleted', success: true });
     } catch (error) {

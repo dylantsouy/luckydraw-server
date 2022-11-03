@@ -2,7 +2,7 @@
 const { Model } = require('sequelize');
 const { v4: uuidv4 } = require('uuid');
 module.exports = (sequelize, DataTypes) => {
-    class Winning extends Model {
+    class Company extends Model {
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -10,36 +10,32 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            Winning.belongsTo(models.User, {
-                foreignKey: 'userId',
-                onDelete: 'NO ACTION',
-            });
-            Winning.belongsTo(models.Reward, {
-                foreignKey: 'rewardId',
-                onDelete: 'NO ACTION',
-            });
-            Winning.belongsTo(models.Company, {
+            Company.hasMany(models.User, {
                 foreignKey: 'companyId',
-                onDelete: 'CASCADE',
+                onUpdate: 'CASCADE',
+            });
+            Company.hasMany(models.Reward, {
+                foreignKey: 'companyId',
+                onUpdate: 'CASCADE',
+            });
+            Company.hasMany(models.Admin, {
+                foreignKey: 'companyId',
+                onUpdate: 'CASCADE',
+            });
+            Company.hasMany(models.Setting, {
+                foreignKey: 'companyId',
+                onUpdate: 'CASCADE',
+            });
+            Company.hasMany(models.Winning, {
+                foreignKey: 'companyId',
+                onUpdate: 'CASCADE',
             });
         }
     }
-    Winning.init(
+    Company.init(
         {
-            rewardId: {
-                type: DataTypes.UUID,
-                validate: {
-                    notEmpty: true,
-                },
-            },
-            userId: {
-                type: DataTypes.UUID,
-                validate: {
-                    notEmpty: true,
-                },
-            },
-            companyId: {
-                type: DataTypes.UUID,
+            name: {
+                type: DataTypes.STRING,
                 validate: {
                     notEmpty: true,
                 },
@@ -52,11 +48,11 @@ module.exports = (sequelize, DataTypes) => {
                 },
             },
             charset: 'utf8',
-            collate: 'utf8_general_ci', 
+            collate: 'utf8_general_ci',
             sequelize,
             paranoid: true,
-            modelName: 'Winning',
+            modelName: 'Company',
         }
     );
-    return Winning;
+    return Company;
 };

@@ -26,6 +26,16 @@ module.exports = {
           allowNull: false,
           type: Sequelize.INTEGER,
       },
+      companyId: {
+        allowNull: false,
+        type: Sequelize.UUID,
+        onDelete: 'CASCADE',
+        references: {
+          model: 'Companies',
+          key: 'id',
+          as: 'companyId',
+        }
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

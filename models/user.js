@@ -14,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'userId',
                 onUpdate:"CASCADE"
             });
+            User.belongsTo(models.Company, {
+                foreignKey: 'companyId',
+                onDelete: 'CASCADE',
+            });
         }
     }
     User.init(
@@ -30,11 +34,17 @@ module.exports = (sequelize, DataTypes) => {
                     notEmpty: true,
                 },
             },
+            companyId: {
+                type: DataTypes.UUID,
+                validate: {
+                    notEmpty: true,
+                },
+            },
         },
         {
             hooks: {
-                beforeCreate: (user) => {
-                    user.id = uuidv4();
+                beforeCreate: (data) => {
+                    data.id = uuidv4();
                 },
             },
             charset: 'utf8',

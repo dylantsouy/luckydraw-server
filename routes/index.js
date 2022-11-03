@@ -9,10 +9,13 @@ const uploadExcel = require('../middlewares/uploadExcel');
 const uploadImage = require('../middlewares/uploadImage');
 const verifyToken = require('../middlewares/authJwt');
 
-router.post('/signup', AdminControllers.signup).post('/signin', AdminControllers.signin);
+router
+    .post('/signup', AdminControllers.signup)
+    .post('/signin', AdminControllers.signin)
+    .head('/ping', [verifyToken], AdminControllers.ping);
 
 router
-    .get('/users', [verifyToken], UserControllers.getAllUsers)
+    .get('/users/:companyId', [verifyToken], UserControllers.getAllUsers)
     .get('/users/:id', [verifyToken], UserControllers.getUserById)
     .post('/users', [verifyToken], UserControllers.createUser)
     .post('/users/uploadUser', [verifyToken], uploadExcel.single('file'), UserControllers.uploadUser)
@@ -23,7 +26,7 @@ router
     .post('/users/count', [verifyToken], UserControllers.getUserCount);
 
 router
-    .get('/rewards', [verifyToken], RewardControllers.getAllRewards)
+    .get('/rewards/:companyId', [verifyToken], RewardControllers.getAllRewards)
     .get('/rewards/:id', [verifyToken], RewardControllers.getRewardById)
     .post('/rewards', [verifyToken], uploadImage.single('file'), RewardControllers.uploadReward)
     .delete('/rewards/:id', [verifyToken], RewardControllers.deleteReward)
@@ -33,17 +36,18 @@ router
     .post('/rewards/createAdditionalReward', [verifyToken], RewardControllers.createAdditionalReward)
     .post('/rewards/updateWinningResult/:id', [verifyToken], RewardControllers.updateWinningResult)
     .post('/rewards/count', [verifyToken], RewardControllers.getRewardCount)
-    .post('/rewards/getNoWinningsRewards', [verifyToken], RewardControllers.getNoWinningsRewards)
+    .post('/rewards/getNoWinningsRewards', [verifyToken], RewardControllers.getNoWinningsRewards);
 
 router
-    .get('/winnings', [verifyToken], WinningControllers.getAllWinnings)
+    .get('/winnings/:companyId', [verifyToken], WinningControllers.getAllWinnings)
     .delete('/winnings/:id', [verifyToken], WinningControllers.deleteWinning)
     .post('/winnings/deleteWinnings', [verifyToken], WinningControllers.deleteWinnings)
     .post('/winnings/deleteAll', [verifyToken], WinningControllers.deleteAllWinning)
     .post('/winnings', WinningControllers.createWinning);
 
 router
-    .get('/admins', [verifyToken], AdminControllers.getAllAdmins)
+    .get('/admins/:companyId', [verifyToken], AdminControllers.getAllAdmins)
+    .post('/admins/createAdmin', [verifyToken], AdminControllers.createAdmin)
     .put('/admins/:id', [verifyToken], AdminControllers.updateAdmin)
     .post('/admins/updatePassword', [verifyToken], AdminControllers.updateAdminPassword)
     .delete('/admins/:id', [verifyToken], AdminControllers.deleteAdmin)
@@ -51,7 +55,7 @@ router
     .post('/admins/deleteAll', [verifyToken], AdminControllers.deleteAllAdmin);
 
 router
-    .get('/settings', [verifyToken], SettingControllers.getSettingById)
+    .get('/settings/:companyId', [verifyToken], SettingControllers.getSettingById)
     .post('/settings', [verifyToken], SettingControllers.createSetting)
     .post('/settings/update', [verifyToken], uploadImage.single('file'), SettingControllers.updateSetting);
 

@@ -11,12 +11,12 @@ cloudinary.config({
 });
 
 const createSetting = async (req, res) => {
+    const { companyId } = req.body;
     try {
-        const count = await Setting.count();
+        const count = await Setting.count({ where: { companyId } });
         if (count > 0) {
             return res.status(400).json({ message: 'setting already exist', success: false });
         }
-        req.body.id = 0;
         const data = await Setting.create(req.body);
         return res.status(200).json({ data, success: true });
     } catch (error) {
@@ -25,9 +25,10 @@ const createSetting = async (req, res) => {
 };
 
 const getSettingById = async (req, res) => {
+    const { companyId } = req.params;
     try {
         const data = await Setting.findOne({
-            where: { id: 0 },
+            where: { companyId },
         });
         if (data) {
             return res.status(200).json({ data, success: true });
@@ -42,42 +43,50 @@ const getSettingById = async (req, res) => {
 };
 
 const updateSetting = async (req, res) => {
+    const { companyId } = req.body;
     try {
-        req.body.id = 0;
         if (req.file) {
-            let id = uuidv4();
-            cloudinary.uploader.upload(req.file.path, { public_id: `background-${id}` }, async (error, result) => {
-                if (result?.url) {
-                    let createResult = await Setting.update(
-                        {
-                            ...req.body,
-                            background: result.url,
-                        },
-                        {
-                            where: { id: 0 },
-                        }
-                    );
-                    if (createResult) {
-                        const data = await Setting.findOne({ where: { id: 0 } });
-                        if (data) {
-                            return res.status(200).json({ data, success: true });
-                        } else {
-                            return res.status(400).send({
-                                message: 'unexpected error',
-                                success: false,
-                            });
+            if (req.file.size > 1048576) {
+                return res.status(400).json({ message: 'File size over 1MB', success: false });
+            }
+            cloudinary.uploader.destroy(`background_${companyId}`, function (result) {
+                cloudinary.uploader.upload(
+                    req.file.path,
+                    { public_id: `background_${companyId}` },
+                    async (error, result) => {
+                        if (result?.url) {
+                            let createResult = await Setting.update(
+                                {
+                                    ...req.body,
+                                    background: result.url,
+                                },
+                                {
+                                    where: { companyId },
+                                }
+                            );
+                            if (createResult) {
+                                const data = await Setting.findOne({ where: { companyId } });
+                                if (data) {
+                                    return res.status(200).json({ data, success: true });
+                                } else {
+                                    return res.status(400).send({
+                                        message: 'unexpected error',
+                                        success: false,
+                                    });
+                                }
+                            }
+                            return res
+                                .status(500)
+                                .json({ message: `Error when trying upload images: ${error}`, success: false });
                         }
                     }
-                    return res
-                        .status(500)
-                        .json({ message: `Error when trying upload images: ${error}`, success: false });
-                }
+                );
             });
         } else {
             const [updated] = await Setting.update(req.body, {
-                where: { id: 0 },
+                where: { companyId },
             });
-            const data = await Setting.findOne({ where: { id: 0 } });
+            const data = await Setting.findOne({ where: { companyId } });
             if (updated) {
                 return res.status(200).json({ data, success: true });
             } else {

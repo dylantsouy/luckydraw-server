@@ -1,6 +1,5 @@
 'use strict';
 const { Model } = require('sequelize');
-const { v4: uuidv4 } = require('uuid');
 module.exports = (sequelize, DataTypes) => {
     class Reward extends Model {
         /**
@@ -12,6 +11,10 @@ module.exports = (sequelize, DataTypes) => {
             // define association here
             Reward.hasMany(models.Winning, {
                 foreignKey: 'rewardId',
+            });
+            Reward.belongsTo(models.Company, {
+                foreignKey: 'companyId',
+                onDelete: 'CASCADE',
             });
         }
     }
@@ -43,6 +46,12 @@ module.exports = (sequelize, DataTypes) => {
             },
             winning: {
                 type: DataTypes.JSON,
+            },
+            companyId: {
+                type: DataTypes.UUID,
+                validate: {
+                    notEmpty: true,
+                },
             },
         },
         {

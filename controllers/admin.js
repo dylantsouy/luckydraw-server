@@ -1,17 +1,56 @@
-const { Admin } = require('../models');
+const { Admin, Company, Setting } = require('../models');
 const { errorHandler } = require('../helpers/responseHelper');
 const config = require('../config/auth.config');
 
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
+const { Op } = require('sequelize');
+
+const ping = async (req, res) => {
+    try {
+        return res.status(200).json({ message: 'Successful', success: true });
+    } catch (error) {
+        return res.status(500).json({ message: errorHandler(error), success: false });
+    }
+};
 
 const signup = async (req, res) => {
     try {
+        const { company, password, username, email } = req.body;
+        req.body.role = 0;
+        if (!company || !username || !email) {
+            return res.status(400).json({ message: 'please fill required field', success: false });
+        }
+        if (!/^[a-z0-9]{8,50}$/i.test(password))
+            return res.status(400).json({ message: 'Validation is on password failed', success: false });
+        let result = await Company.create({ name: company });
+        if (result?.id) {
+            req.body.companyId = result.id;
+        }
+        req.body.password = bcrypt.hashSync(password, 8);
+
+        await Admin.create(req.body);
+        await Setting.create({
+            companyId: req.body.companyId,
+            background: '',
+            title: '',
+            subTitle: '',
+            bgColor: '',
+            textColor: '',
+        });
+        return res.status(200).json({ message: 'Successful Created', success: true });
+    } catch (error) {
+        return res.status(500).json({ message: errorHandler(error), success: false });
+    }
+};
+
+const createAdmin = async (req, res) => {
+    try {
         if (!/^[a-z0-9]{8,50}$/i.test(req?.body?.password))
-            return res.status(400).json({ message: "Validation is on password failed", success: false });
+            return res.status(400).json({ message: 'Validation is on password failed', success: false });
         req.body.password = bcrypt.hashSync(req.body.password, 8);
         await Admin.create(req.body);
-        return res.status(200).json({ message:"Successful Created", success: true });
+        return res.status(200).json({ message: 'Successful Created', success: true });
     } catch (error) {
         return res.status(500).json({ message: errorHandler(error), success: false });
     }
@@ -48,6 +87,7 @@ const signin = async (req, res) => {
                 username: data.username,
                 email: data.email,
                 role: data.role,
+                companyId: data.companyId,
             },
             token,
             success: true,
@@ -57,10 +97,10 @@ const signin = async (req, res) => {
     }
 };
 
-
 const getAllAdmins = async (req, res) => {
+    const { companyId } = req.params;
     try {
-        const data = await Admin.findAll();
+        const data = await Admin.findAll({ where: { companyId } });
         return res.status(200).json({ data, success: true });
     } catch (error) {
         return res.status(500).send({ message: errorHandler(error), success: false });
@@ -98,7 +138,7 @@ const updateAdminPassword = async (req, res) => {
     try {
         const { id } = req.body;
         if (!/^[a-z0-9]{8,50}$/i.test(req?.body?.password))
-            return res.status(400).json({ message: "Validation is on password failed", success: false });
+            return res.status(400).json({ message: 'Validation is on password failed', success: false });
         req.body.password = bcrypt.hashSync(req.body.password, 8);
         const [updated] = await Admin.update(req.body, {
             where: { id },
@@ -160,9 +200,10 @@ const deleteAdmins = async (req, res) => {
 };
 
 const deleteAllAdmin = async (req, res) => {
+    const { companyId } = req.body;
     try {
         await Admin.destroy({
-            truncate: true,
+            where: { companyId, role: { [Op.not]: 0 } },
         });
         return res.status(200).send({ message: 'Successful deleted', success: true });
     } catch (error) {
@@ -178,5 +219,7 @@ module.exports = {
     updateAdmin,
     deleteAdmin,
     deleteAdmins,
-    updateAdminPassword
+    updateAdminPassword,
+    createAdmin,
+    ping,
 };
