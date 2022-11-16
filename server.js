@@ -1,11 +1,18 @@
 const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
+var http = require("http")
 const routes = require('./routes');
 const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 5000;
+const wsPORT = process.env.PORT || 3333;
 const app = express();
 const { Server } = require('ws');
+
+var server = http.createServer(app);
+server.listen(wsPORT)
+const wss = new Server({ server });
+
 
 global.__basedir = __dirname;
 
@@ -18,10 +25,6 @@ app.use('/api', routes);
 app.use(logger('dev'));
 
 app.listen(PORT, () => console.log(`App listening at http://localhost:${PORT}/api/`));
-
-const server = express().listen(3000, () => console.log(`Listening on 3000`));
-
-const wss = new Server({ server });
 
 wss.on('connection', (ws) => {
     console.log('Client connected');
