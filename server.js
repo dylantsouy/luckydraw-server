@@ -9,10 +9,6 @@ const wsPORT = process.env.PORT || 3333;
 const app = express();
 const { Server } = require('ws');
 
-var server = http.createServer(app);
-server.listen(wsPORT)
-const wss = new Server({ server });
-
 
 global.__basedir = __dirname;
 
@@ -20,6 +16,10 @@ app.use(bodyParser.json());
 
 app.use(cors());
 
+
+var server = http.createServer(app);
+server.listen(wsPORT)
+const wss = new Server({ server });
 app.use('/api', routes);
 
 app.use(logger('dev'));
