@@ -97,8 +97,11 @@ If you want to generate seed
 
 ## 🚀 Deployment <a name = "deployment"></a>
 
-Deploy to Heroku
-https://luckydraw-server.herokuapp.com/api/
+Frontend Deploy By github page
+https://pages.github.com/
+
+API Deploy By Render
+https://render.com/
 
 ## ⛏️ Built Using <a name = "built_using"></a>
 
@@ -106,6 +109,7 @@ https://luckydraw-server.herokuapp.com/api/
 - [NodeJs](https://nodejs.org/en/) - Server Environment
 - [Express](https://expressjs.com/) - Server Framework
 - [Sequelize](https://sequelize.org/) - Node.js ORM
+- [Render](https://render.com/) - Clould
 
 ## ✍️ Authors <a name = "authors"></a>
 
